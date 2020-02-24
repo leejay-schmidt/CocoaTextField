@@ -17,36 +17,42 @@ public class CocoaTextField: UITextField {
      * Sets hint color for not focused state
      */
     @IBInspectable
-    open var inactiveHintColor = UIColor.gray {
-        didSet { configureHint() }
+    open var inactiveHintColor: UIColor = .gray {
+        didSet {
+            self.configureHint()
+        }
     }
     
     /**
      * Sets hint color for focused state
      */
     @IBInspectable
-    open var activeHintColor = UIColor.cyan
+    open var activeHintColor: UIColor = .cyan
     
     /**
      * Sets background color for not focused state
      */
     @IBInspectable
-    open var defaultBackgroundColor = UIColor.lightGray.withAlphaComponent(0.8) {
-        didSet { backgroundColor = defaultBackgroundColor }
+    open var defaultBackgroundColor: UIColor = UIColor.lightGray.withAlphaComponent(0.8) {
+        didSet {
+            self.backgroundColor = self.defaultBackgroundColor
+        }
     }
     
     /**
     * Sets background color for focused state
     */
     @IBInspectable
-    open var focusedBackgroundColor = UIColor.lightGray
+    open var focusedBackgroundColor: UIColor = .lightGray
     
     /**
     * Sets border color
     */
     @IBInspectable
-    open var borderColor = UIColor.lightGray {
-        didSet { layer.borderColor = borderColor.cgColor }
+    open var borderColor: UIColor = .lightGray {
+        didSet {
+            self.layer.borderColor = self.borderColor.cgColor
+        }
     }
     
     /**
@@ -54,7 +60,9 @@ public class CocoaTextField: UITextField {
     */
     @IBInspectable
     open var borderWidth: CGFloat = 1.0 {
-        didSet { layer.borderWidth = borderWidth }
+        didSet {
+            self.layer.borderWidth = borderWidth
+        }
     }
     
     /**
@@ -62,20 +70,28 @@ public class CocoaTextField: UITextField {
     */
     @IBInspectable
     open var cornerRadius: CGFloat = 11 {
-        didSet { layer.cornerRadius = cornerRadius }
+        didSet {
+            self.layer.cornerRadius = cornerRadius
+        }
     }
     
     /**
     * Sets error color
     */
     @IBInspectable
-    open var errorColor = UIColor.red {
-        didSet { errorLabel.textColor = errorColor }
+    open var errorColor: UIColor = .red {
+        didSet {
+            self.errorLabel.textColor = errorColor
+        }
     }
     
     override open var placeholder: String? {
-        set { hintLabel.text = newValue }
-        get { return hintLabel.text }
+        set {
+            self.hintLabel.text = newValue
+        }
+        get {
+            return self.hintLabel.text
+        }
     }
     
     private var isHintVisible = false
@@ -92,51 +108,55 @@ public class CocoaTextField: UITextField {
             self.layer.borderColor = self.errorColor.cgColor
             self.errorLabel.alpha = 1
         }
-        errorLabel.text = errorString
-        updateErrorLabelPosition()
-        errorLabel.shake(offset: 10)
+        self.errorLabel.text = errorString
+        self.updateErrorLabelPosition()
+        self.errorLabel.shake(offset: 10)
     }
     
     //  MARK: Private
     
     private func initializeTextField() {
-        configureTextField()
-        configureHint()
-        configureErrorLabel()
-        addObservers()
+        self.configureTextField()
+        self.configureHint()
+        self.configureErrorLabel()
+        self.addObservers()
     }
     
     private func addObservers() {
-        addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        self.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
     
     private func configureTextField() {
-        clearButtonMode = .whileEditing
-        autocorrectionType = .no
-        spellCheckingType = .no
-        layer.borderWidth = borderWidth
-        layer.cornerRadius = cornerRadius
-        hintLabel.frame = CGRect(origin: CGPoint.zero, size: CGSize(width: frame.width, height: frame.height))
-        addSubview(hintLabel)
+        self.clearButtonMode = .whileEditing
+        self.autocorrectionType = .no
+        self.spellCheckingType = .no
+        self.layer.borderWidth = borderWidth
+        self.layer.cornerRadius = cornerRadius
+        self.hintLabel.frame = CGRect(origin: CGPoint.zero,
+                                      size: CGSize(width: self.frame.width,
+                                                   height: self.frame.height))
+        self.addSubview(hintLabel)
     }
     
     private func configureHint() {
-        hintLabel.transform = CGAffineTransform.identity.translatedBy(x: padding, y: 0)
-        hintLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        hintLabel.font = font
-        hintLabel.textColor = inactiveHintColor
+        self.hintLabel.transform = CGAffineTransform.identity.translatedBy(x: padding, y: 0)
+        self.hintLabel.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        self.hintLabel.font = self.font
+        self.hintLabel.textColor = inactiveHintColor
     }
     
     private func configureErrorLabel() {
-        errorLabel.font = UIFont.systemFont(ofSize: 12)
-        errorLabel.textAlignment = .right
-        errorLabel.textColor = errorColor
-        errorLabel.alpha = 0
-        addSubview(errorLabel)
+        self.errorLabel.font = UIFont.systemFont(ofSize: 12)
+        self.errorLabel.textAlignment = .right
+        self.errorLabel.textColor = self.errorColor
+        self.errorLabel.alpha = 0
+        self.addSubview(self.errorLabel)
     }
     
     private func activateTextField() {
-        if isHintVisible { return }
+        guard !self.isHintVisible else {
+            return
+        }
         
         UIView.animate(withDuration: 0.2) {
             if let text = self.text, !text.isEmpty {
@@ -180,10 +200,11 @@ public class CocoaTextField: UITextField {
     }
     
     private func updateErrorLabelPosition() {
-        let size = errorLabel.sizeThatFits(CGSize(width: frame.width, height: CGFloat.greatestFiniteMagnitude))
-        errorLabel.frame.size = size
-        errorLabel.frame.origin.x = frame.width - size.width
-        errorLabel.frame.origin.y = frame.height + padding / 4
+        let size = self.errorLabel.sizeThatFits(CGSize(width: self.frame.width,
+                                                       height: CGFloat.greatestFiniteMagnitude))
+        self.errorLabel.frame.size = size
+        self.errorLabel.frame.origin.x = self.frame.width - size.width
+        self.errorLabel.frame.origin.y = self.frame.height + padding / 4
     }
     
     @objc private func textFieldDidChange() {
@@ -197,22 +218,22 @@ public class CocoaTextField: UITextField {
     
     @discardableResult
     override open func becomeFirstResponder() -> Bool {
-        activateTextField()
+        self.activateTextField()
         return super.becomeFirstResponder()
     }
 
     @discardableResult
     override open func resignFirstResponder() -> Bool {
-        deactivateTextField()
+        self.deactivateTextField()
         return super.resignFirstResponder()
     }
     
     override open func textRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.textRect(forBounds: bounds)
         let rect = CGRect(
-            x: padding,
+            x: self.padding,
             y: superRect.origin.y,
-            width: superRect.size.width - padding * 1.5,
+            width: superRect.size.width - self.padding * 1.5,
             height: superRect.size.height
         )
         return rect
@@ -221,36 +242,36 @@ public class CocoaTextField: UITextField {
     override open func editingRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.editingRect(forBounds: bounds)
         let rect = CGRect(
-            x: padding,
-            y: hintHeight() - padding / 8,
-            width: superRect.size.width - padding * 1.5,
-            height: superRect.size.height - hintHeight()
+            x: self.padding,
+            y: self.hintHeight() - self.padding / 8,
+            width: superRect.size.width - self.padding * 1.5,
+            height: superRect.size.height - self.hintHeight()
         )
         return rect
     }
     
     override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return textRect(forBounds: bounds)
+        return self.textRect(forBounds: bounds)
     }
     
     override open func clearButtonRect(forBounds bounds: CGRect) -> CGRect {
         let superRect = super.clearButtonRect(forBounds: bounds)
-        return superRect.offsetBy(dx: -padding / 2, dy: 0)
+        return superRect.offsetBy(dx: -self.padding / 2, dy: 0)
     }
     
     override open var intrinsicContentSize: CGSize {
-        return CGSize(width: bounds.size.width, height: 64)
+        return CGSize(width: self.bounds.size.width, height: 64)
     }
     
     //  MARK: Init
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        initializeTextField()
+        self.initializeTextField()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        initializeTextField()
+        self.initializeTextField()
     }
 }
